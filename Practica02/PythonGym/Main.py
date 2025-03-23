@@ -1,5 +1,5 @@
 from LGymClient import agentLoop
-from BaseAgent import BaseAgent
+from PerryElOrnitorrinco import PerryElOrnitorrinco
 
-agent = BaseAgent("1","Isma")
+agent = PerryElOrnitorrinco("1","Perry")
 agentLoop(agent,True)
