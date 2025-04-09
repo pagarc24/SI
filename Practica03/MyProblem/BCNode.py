@@ -16,8 +16,8 @@ class BCNode(Node):
     def __eq__(self, other):
         if other == None:
             return False
-        #TODO: dos nodos son iguales cuando sus coordenadas x e y son iguales.
-        return False
+        #dos nodos son iguales cuando sus coordenadas x e y son iguales.
+        return self.x == other.x and self.y == other.y
 
     def __hash__(self):
         return hash((self.x, self.y))

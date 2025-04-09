@@ -33,15 +33,46 @@ class BCProblem(Problem):
 
     #Calcula la heuristica del nodo en base al problema planteado (Se necesita reimplementar)
     def Heuristic(self, node):
-        #TODO: heurística del nodo
-        print("Aqui falta ncosas por hacer :) ")
-        return 0
+        # Usamos la distancia Manhattan como heurística
+        #distancia entre el nodo y la meta
+        x1, y1 = node.x, node.y
+        x2, y2 = self.goal.x, self.goal.y
+        dx = abs(x1 - x2)
+        dy = abs(y1 - y2)
+        #distancia entre el nodo y la meta
+        h = dx + dy
+        return h#return 0
 
     #Genera la lista de sucesores del nodo (Se necesita reimplementar)
     def GetSucessors(self, node):
         successors = []
-        #TODO: sucesores de un nodo dado
-        print("Aqui falta ncosas por hacer :) ")
+        #sucesores de un nodo dado
+        #direcciones posibles: arriba, abajo, izquierda, derecha
+
+        #dirección arriba
+        x = node.x
+        y = node.y + 1
+        if y < self.ySize and BCProblem.CanMove(self.map[x][y]):
+            self.CreateNode(successors,node,x,y)
+
+        #dirección abajo
+        x = node.x
+        y = node.y - 1
+        if y >= 0 and BCProblem.CanMove(self.map[x][y]):
+            self.CreateNode(successors,node,x,y)
+        
+        #dirección izquierda
+        x = node.x - 1
+        y = node.y
+        if x >= 0 and BCProblem.CanMove(self.map[x][y]):
+            self.CreateNode(successors,node,x,y)
+        
+        #dirección derecha
+        x = node.x + 1
+        y = node.y
+        if x < self.xSize and BCProblem.CanMove(self.map[x][y]):
+            self.CreateNode(successors,node,x,y)
+
         return successors
     
     #métodos estáticos
@@ -93,8 +124,25 @@ class BCProblem(Problem):
     #se utiliza para calcular el coste de cada elemento del mapa 
     @staticmethod
     def GetCost(value):
-        #TODO: debes darle un coste a cada tipo de casilla del mapa.
-        return sys.maxsize
+        #debes darle un coste a cada tipo de casilla del mapa.
+        #coste de casilla normal = 1
+        #coste de casilla destruible = 2
+        #coste de casilla semi-destruible = 3
+        #coste de casilla semi-indestructible = 4
+        #coste de casilla indestructible = sys.maxsize (infinito)
+        
+        if value == AgentConsts.NOTHING:
+            return 1
+        elif value == AgentConsts.BRICK:
+            return 2
+        elif value == AgentConsts.SEMI_BREKABLE:
+            return 3
+        elif value == AgentConsts.SEMI_UNBREKABLE:
+            return 4
+        elif value == AgentConsts.UNBREAKABLE:
+            return sys.maxsize
+        else:
+            return 1
     
     #crea un nodo y lo añade a successors (lista) con el padre indicado y la posición x,y en coordenadas mapa 
     def CreateNode(self,successors,parent,x,y):
